@@ -40,6 +40,7 @@ const Inquiry = () => {
     <form action="#" method="POST" onSubmit={(e) => handleSubmit(e)}>
       <label htmlFor="first-name">First Name</label>
       <input
+      className="border rounded"
         type="text"
         name="first-name"
         id="first-name"
