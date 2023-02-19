@@ -25,7 +25,7 @@ const Inquiry = () => {
         console.log("form submitted successfully!!!");
       }
     } catch (error) {
-      console.log('There was an error submitting', error)
+      console.log("There was an error submitting", error);
     }
   };
 
@@ -40,7 +40,7 @@ const Inquiry = () => {
     <form action="#" method="POST" onSubmit={(e) => handleSubmit(e)}>
       <label htmlFor="first-name">First Name</label>
       <input
-      className="border rounded"
+        className="border rounded"
         type="text"
         name="first-name"
         id="first-name"
@@ -71,7 +71,7 @@ const Inquiry = () => {
         onChange={(e) => setMessage(e.target.value)}
         value={message}
       />
-      <button type="submit">Submit</button>
+      <button type="submit">Submit Now</button>
     </form>
   );
 };
