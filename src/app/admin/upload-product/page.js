@@ -17,7 +17,7 @@ const Home = () => {
 
   const formik = useFormik({
     initialValues: {
-      images: [],
+      // images: [],
       name: "",
       description: "",
       price: "",
@@ -39,55 +39,26 @@ const Home = () => {
         .required("Stock count is required"),
     }),
     onSubmit: async (
-      { images, name, description, price, stockCount },
+      { name, description, price, stockCount },
       { resetForm }
     ) => {
-      setLoading(true);
-      const storeImage = async (image) => {
-        return new Promise((resolve, reject) => {
-          const storageRef = ref(storage, "images/" + image.name);
-
-          const uploadTask = uploadBytesResumable(storageRef, image);
-
-          uploadTask.on(
-            "state_changed",
-            (snapshot) => {
-              const progress =
-                (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-              console.log("Upload is " + progress + "% done");
-              switch (snapshot.state) {
-                case "paused":
-                  console.log("Upload is paused");
-                  break;
-                case "running":
-                  console.log("Upload is running");
-                  break;
-              }
-            },
-            (error) => {
-              reject(error);
-            },
-            () => {
-              getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-                resolve(downloadURL);
-              });
-            }
-          );
+      const body = { name, description, price, stockCount };
+      try {
+        const response = await fetch("/api/product", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(body),
         });
-      };
 
-      const imageUrls = await Promise.all(
-        images.map(async (image) => {
-          return await storeImage(image);
-        })
-      ).catch((error) => {
-        setLoading(false);
-        setSuccess(false);
-        setError(error.message);
-      });
-
-      console.log(imageUrls);
-      //Save the product in planetscale
+        if (response.status !== 200) {
+          console.log("Something went wrong");
+        } else {
+          resetForm();
+          console.log("form submitted successfully!!!");
+        }
+      } catch (error) {
+        console.log("There was an error submitting", error);
+      }
     },
   });
 
@@ -98,7 +69,7 @@ const Home = () => {
       </h1>
       <form className="flex flex-col" onSubmit={formik.handleSubmit}>
         <div className="flex flex-col mx-8 my-8">
-          <FormInputFile formik={formik} />
+          {/* <FormInputFile formik={formik} /> */}
           <FormInput formik={formik} label="Name" field="name" type="text" />
           <FormTextArea formik={formik} />
           <FormInput
